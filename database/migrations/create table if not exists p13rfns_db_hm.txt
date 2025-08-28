@@ -1,0 +1,37 @@
+create table if not exists p13rfns_db_hml.parcerias
+(
+    id              int unsigned auto_increment
+        primary key,
+    user_origin_id  int unsigned                         not null,
+    user_destiny_id int unsigned                         not null,
+    active          tinyint(1) default 1                 not null,
+    created_at      timestamp  default CURRENT_TIMESTAMP null,
+    updated_at      timestamp  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
+    constraint fk_parcerias_user_destiny
+        foreign key (user_destiny_id) references p13rfns_db_hml.users (id)
+            on delete cascade,
+    constraint fk_parcerias_user_origin
+        foreign key (user_origin_id) references p13rfns_db_hml.users (id)
+            on delete cascade
+);
+
+
+
+create table if not exists p13rfns_db_hml.parceria_histories
+(
+    id          int unsigned auto_increment
+        primary key,
+    parceria_id int unsigned                        not null,
+    text        text                                not null,
+    sender_id   int unsigned                        not null,
+    created_at  timestamp default CURRENT_TIMESTAMP null,
+    updated_at  timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
+    constraint fk_histories_parceria
+        foreign key (parceria_id) references p13rfns_db_hml.parcerias (id)
+            on delete cascade,
+    constraint fk_histories_sender
+        foreign key (sender_id) references p13rfns_db_hml.users (id)
+            on delete cascade
+);
+
+

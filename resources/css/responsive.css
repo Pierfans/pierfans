@@ -1,0 +1,130 @@
+/* Arquivo de estilos responsivos para o Pierfans */
+
+/* Estilos globais responsivos */
+@media (max-width: 767px) {
+  .text-center-sm {
+    text-align: center !important;
+  }
+  
+  .btn-w-mb {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  
+  .py-large {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+  
+  .first {
+    order: 2;
+  }
+  
+  .second {
+    order: 1;
+  }
+}
+
+/* Ajustes para tablets */
+@media (min-width: 768px) and (max-width: 991px) {
+  .py-large {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+}
+
+/* Ajustes para telas pequenas */
+@media (max-width: 576px) {
+  h1.display-4 {
+    font-size: 2.5rem;
+  }
+  
+  .jumbotron {
+    padding: 2rem 1rem;
+  }
+}
+
+/* Ajustes para elementos específicos */
+@media (max-width: 767px) {
+  .menuMobile {
+    display: block !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1030;
+  }
+  
+  body {
+    padding-bottom: 60px;
+  }
+  
+  .dropdown-menu-right {
+    right: 0;
+    left: auto;
+  }
+}
+
+/* Ajustes para imagens */
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Ajustes para tabelas responsivas */
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Ajustes específicos para dashboard */
+@media (max-width: 767px) {
+  .dashboard-card {
+    margin-bottom: 1.5rem;
+  }
+  
+  .dashboard-table {
+    font-size: 0.9rem;
+  }
+  
+  .dashboard-stats .card {
+    margin-bottom: 1rem;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  /* Ajustes para tabelas no dashboard */
+  #subscriptionsTable th,
+  #subscriptionsTable td,
+  #withdrawalsTable th,
+  #withdrawalsTable td {
+    padding: 0.5rem;
+  }
+  
+  /* Ajustes para gráficos no dashboard */
+  .chart-container {
+    padding: 0.5rem;
+    overflow-x: auto;
+  }
+}
+
+/* Ajustes para formulários */
+@media (max-width: 767px) {
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  input.form-control, 
+  select.form-control, 
+  textarea.form-control {
+    font-size: 16px; /* Evita zoom em dispositivos iOS */
+  }
+}

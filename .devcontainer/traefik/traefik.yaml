@@ -1,0 +1,35 @@
+global:
+  sendAnonymousUsage: false
+
+api:
+  dashboard: true
+  insecure: true
+  debug: true
+
+providers:
+  docker:
+    endpoint: unix:///var/run/docker.sock
+    watch: true
+    network: app-network
+    defaultRule: "Host(`{{ trimPrefix `/` .Name }}.docker.localhost`)"
+    exposedbydefault: false
+
+  file:
+    filename: /etc/traefik/dynamic_conf.yaml
+    watch: true
+
+log:
+  level: DEBUG
+  format: common
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+
+  websecure:
+    address: ":443"

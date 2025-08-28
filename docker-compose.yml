@@ -1,0 +1,102 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.pierfans.tls=true'
+      - 'traefik.http.routers.pierfans.entrypoints=websecure'
+      - 'traefik.http.routers.pierfans.rule=Host(`pierfans.docker.localhost`)'
+      - 'traefik.http.services.pierfans.loadbalancer.server.port=80'
+    depends_on:
+      - db
+      - redis
+    networks:
+      - app-network
+
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    command: php artisan queue:work --verbose --tries=30 --timeout=3000
+    depends_on:
+      - db
+      - redis
+      - app
+    networks:
+      - app-network
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: p13rfns_db_hml
+      MYSQL_ROOT_PASSWORD: docker1
+      MYSQL_PASSWORD: docker1
+      MYSQL_USER: docker
+    volumes:
+      - dbdata:/var/lib/mysql
+    command:
+      - --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+  maildev:
+    image: maildev/maildev
+    ports:
+      - "1080:1080" # Web interface
+      - "1025:1025" # SMTP server port
+    healthcheck:
+      disable: true
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.maildev.tls=true'
+      - 'traefik.http.routers.maildev.entrypoints=websecure'
+      - 'traefik.http.routers.maildev.rule=Host(`webmail.docker.localhost`)'
+      - 'traefik.http.services.maildev.loadbalancer.server.port=1080'
+    networks:
+      app-network:
+
+
+  traefik:
+    image: traefik:v2.5
+    ports:
+      - "80:80"
+      - "443:443"
+      - "7070:8080"
+    volumes:
+      - ./.devcontainer/ssl:/etc/certs:ro
+      - ./.devcontainer/traefik/traefik.yaml:/etc/traefik/traefik.yaml:ro
+      - ./.devcontainer/traefik/dynamic_conf.yaml:/etc/traefik/dynamic_conf.yaml:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - maildev
+    networks:
+      app-network:
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  dbdata:
+  storage-data:

@@ -1,0 +1,15 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Bloquear acesso direto a arquivos sensíveis
+    <Files ~ "\.(env|config\.js|md|gitignore|gitattributes|lock)$">
+        Require all denied
+    </Files>
+
+    # Se for arquivo ou diretório existente, serve diretamente
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Caso contrário, manda tudo para index.php (front-controller na raiz)
+    RewriteRule ^ index.php [L]
+</IfModule>
